@@ -1,0 +1,222 @@
+/* ============================================================
+   扫雷 · 基础版样式表（经典 Win98 立体框）
+   - 卡片宽度固定为棋盘宽度，点第一格时不会左右 / 上下跳动
+   - 状态栏宽度固定，计时文字变化不影响布局
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: #2c5a8c;
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ---- 卡片：宽度 = 9 × 32 + 棋盘边框 6 + 左右 padding 40 + 卡片边框 6 ---- */
+.app {
+  margin: auto;
+  width: 340px;
+  background: #c0c0c0;
+  border: 3px solid;
+  border-color: #ffffff #808080 #808080 #ffffff; /* 经典凸起窗框 */
+  border-radius: 4px;
+  padding: 16px 20px 14px;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+/* ---- 游戏说明栏 ---- */
+.guide {
+  margin: 0 0 10px;
+  padding: 4px 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #2b2b2b;
+  background: #d4d0c8;
+  border: 1px solid;
+  border-color: #808080 #ffffff #ffffff #808080; /* 凹陷 */
+  text-wrap: balance;
+}
+
+/* ---- 工具栏：状态 + 重新开始 ---- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.status {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 5px 8px;
+  background: #000;
+  color: #ff0000;
+  font-family: "Courier New", Consolas, monospace;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+}
+
+.status.won { color: #00ff00; }
+.status.lost { color: #ff0000; }
+
+.restart-btn {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  white-space: nowrap;
+  background: #d4d0c8;
+  border: 2px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  cursor: pointer;
+}
+
+.restart-btn:active {
+  border-color: #404040 #ffffff #ffffff #404040;
+}
+
+/* ---- 棋盘 ---- */
+.board {
+  display: inline-block;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 9), 32px);
+  grid-template-rows: repeat(var(--rows, 9), 32px);
+  border: 3px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+}
+
+/* ---- 格子 ---- */
+.cell {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  background: #bdbdbd;
+  border: 3px solid;
+  border-color: #ffffff #808080 #808080 #ffffff; /* 凸起 */
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.cell:focus-visible {
+  outline: 2px solid #0000ff;
+  outline-offset: -2px;
+}
+
+/* 已挖开：凹陷 */
+.cell.revealed {
+  border: 1px solid #9a9a9a;
+  background: #d5d5d5;
+  cursor: default;
+}
+
+/* 数字格 */
+.cell.num {
+  font-weight: 700;
+}
+
+/* 爆炸格 */
+.cell.exploded {
+  background: #ff4444;
+  border-color: #ff0000 #880000 #880000 #ff0000;
+}
+
+/* 插错的旗（踩雷后提示） */
+.cell.wrong {
+  background: #f1c9c9;
+}
+
+/* 结算后整盘不再显示手型 */
+.board-grid.is-ended .cell {
+  cursor: default;
+}
+
+.hint {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #404040;
+}
+
+/* 仅供屏幕阅读器 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- 窄屏（如 iPhone SE 320px）：整体等比收小一格 ---- */
+@media (max-width: 339px) {
+  .app {
+    width: 304px;
+  }
+
+  .board-grid {
+    grid-template-columns: repeat(var(--cols, 9), 28px);
+    grid-template-rows: repeat(var(--rows, 9), 28px);
+  }
+
+  .cell {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .status {
+    font-size: 12px;
+    padding: 5px 6px;
+  }
+
+  .restart-btn {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
+  .guide {
+    font-size: 11px;
+  }
+
+  .guide-meta {
+    display: none;
+  }
+
+  .hint {
+    font-size: 12px;
+  }
+}
