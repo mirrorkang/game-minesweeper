@@ -4,6 +4,10 @@
 
 零依赖、零构建的网页版经典扫雷：双击 `index.html` 就能玩。
 
+**在线试玩**：<https://mirrorkang.github.io/game-minesweeper/>
+
+<img src="screenshot.png" width="360" alt="扫雷首胜截图">
+
 ## 玩法
 
 - 9×9 棋盘、10 颗雷，挖开全部 71 个安全格即获胜
